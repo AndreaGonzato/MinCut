@@ -273,7 +273,7 @@ public class Main {
     }
 
     public static Contraction contractEdge(Graph graph, DefaultEdge defaultEdgeToContract) {
-        if (!graph.edgeSet().stream().anyMatch(defaultEdge -> defaultEdge.equals(defaultEdgeToContract))){
+        if (graph.edgeSet().stream().noneMatch(defaultEdge -> defaultEdge.equals(defaultEdgeToContract))){
             throw new IllegalArgumentException("to contract an edge, the edge need to be in the graph");
         }
 
