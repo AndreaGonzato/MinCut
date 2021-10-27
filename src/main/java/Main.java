@@ -1,6 +1,7 @@
 import org.jgrapht.graph.DefaultEdge;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Main {
 
@@ -13,6 +14,10 @@ public class Main {
 
 
     public static void main(String[] args) {
+        Graph testGrap = new Graph(10, 0.3);
+        System.out.println(testGrap);
+        System.out.println(contractRandomEdge(testGrap).getContractedEdge());
+        System.out.println(testGrap);
 
         int[] graphSizes = {10, 35, 40, 43};
 
@@ -158,12 +163,12 @@ public class Main {
     }
 
     /**
-     * Reduce the graph Recursively.
+     * Try to reduce the graph Recursively.
 
      * @param graph : a graph to contract several times. after the invocation of the method the graph is changed (smaller size)
      * @param contractionsMap : a data structure that keeps track of all the contractions
      * @param sizeToReduce : an integer that denote how many times we want to contract the graph
-     * @return the disconnectedNode node in case found one
+     * @return the disconnectedNode node in case during the process we found one
      */
     public static Optional<String> contractGraphRecursively(Graph graph, Map<String, Edge> contractionsMap, int sizeToReduce) {
         if (sizeToReduce <= 0 || graph.vertexSet().size() <= 2){
@@ -279,26 +284,26 @@ public class Main {
 
         Edge selectedEdge = new Edge(defaultEdgeToContract.toString());
 
-
         String vertexX = selectedEdge.getVertices()[0];
         String vertexY = selectedEdge.getVertices()[1];
 
         // add vertex Z
         String vertexZ = graph.addOneVertex();
 
-        List<Edge> toRemove = new ArrayList<>();
-        for (Object defaultEdge : graph.getEdgeSet()) {
-            Edge edge = new Edge(defaultEdge.toString());
-            if (edge.getVertices()[1].equals(vertexX)
-                    || edge.getVertices()[1].equals(vertexY)
-                    || edge.getVertices()[0].equals(vertexX)
-                    || edge.getVertices()[0].equals(vertexY)) {
-                toRemove.add(edge);
-            }
+        List<Edge> edgesToRemove = graph.edgesOf(vertexX)
+                .stream()
+                .map(defaultEdge -> new Edge(defaultEdge.toString()))
+                .collect(Collectors.toList());
 
-        }
+        edgesToRemove.addAll(
+                graph.edgesOf(vertexY)
+                        .stream()
+                        .map(defaultEdge -> new Edge(defaultEdge.toString()))
+                        .collect(Collectors.toList())
+        );
 
-        for (Edge edge : toRemove) {
+
+        for (Edge edge : edgesToRemove) {
 
             // corner case
             if ((edge.getVertices()[0].equals(vertexX) && edge.getVertices()[1].equals(vertexY)) ||
