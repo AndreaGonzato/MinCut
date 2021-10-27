@@ -51,16 +51,6 @@ public class Main {
     public static Cut fastCut(Graph graph,  Map<String, Edge> contractionsMap){
         if (graph.vertexSet().size() <= STOPPING_CRITERION_SIZE){
             return startFindMinCutBruteForceVersion(graph);
-//            Cut bestCut = new Cut(Integer.MAX_VALUE);
-//
-//            for (int i = 0; i < 64; i++) {
-//                Graph copyGraph = (Graph) graph.clone();
-//                Map<String, Edge> contractionsMapCopy = new HashMap<>(contractionsMap);
-//                Optional<String> disconnectedNode = contractGraphRecursively(copyGraph,contractionsMapCopy, copyGraph.vertexSet().size());
-//                Cut cut = determineCut(copyGraph, contractionsMapCopy, disconnectedNode);
-//                bestCut = smallerCut(bestCut, cut);
-//            }
-//            return bestCut;
         }
 
         int n = graph.vertexSet().size();
