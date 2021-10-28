@@ -7,41 +7,46 @@ public class Main {
 
     // parameter
     private static final int GRAPH_SIZE = 6;
-    private static final double EDGE_PROBABILITY = 0.1;
+    private static final double EDGE_PROBABILITY = 0.3;
 
     // fixed constant
     private static final int STOPPING_CRITERION_SIZE = 6;
 
 
     public static void main(String[] args) {
-        Graph testGrap = new Graph(10, 0.3);
-        System.out.println(testGrap);
-        System.out.println(contractRandomEdge(testGrap).getContractedEdge());
-        System.out.println(testGrap);
 
-        int[] graphSizes = {10, 35, 40, 43};
 
-        System.out.println("Graph Size | Fast Cut | Karger Algorithm");
-
-        for (int graphSize : graphSizes) {
+        int[] graphSizesCase2 = {3, 5, 10, 20, 40};
+        System.out.println("Graph Size | Algorithm |  Time  | Cut Size");
+        for (int graphSize : graphSizesCase2) {
             Graph graph = new Graph(graphSize, EDGE_PROBABILITY);
-            System.out.format("\t%d\t\t\t",graphSize);
 
             long reference = System.nanoTime();
             Cut kargerCut = startFastCut(graph);
             long finishm = System.nanoTime();
             double time = ((double) (finishm - reference)) / 1000000000.0;
-            System.out.format("%.4f \t\t\t", time);
 
-            reference = System.nanoTime();
-            Cut fastCut = kargerAlgorithm(graph);
-            finishm = System.nanoTime();
-            time = ((double) (finishm - reference)) / 1000000000.0;
-            //System.out.println(time);
-            System.out.format("%.4f \n", time);
-
+            System.out.format("\t%d \t\t FastCut \t %.4f \t\t %d\n", graphSize, time, kargerCut.getSize());
 
         }
+
+        int[] graphSizesCase1 = {6, 20, 30, 50};
+        System.out.println();
+        System.out.println("Graph Size | Algorithm |  Time  | Cut Size");
+        for (int graphSize : graphSizesCase1) {
+            Graph graph = new Graph(graphSize, EDGE_PROBABILITY);
+
+            long reference = System.nanoTime();
+            Cut kargerCut = kargerAlgorithm(graph);
+            long finishm = System.nanoTime();
+            double time = ((double) (finishm - reference)) / 1000000000.0;
+
+            System.out.format("\t%d \t\t Karger Algorithm \t %.4f \t\t %d\n", graphSize, time, kargerCut.getSize());
+
+        }
+
+
+
 
 
 
@@ -302,7 +307,7 @@ public class Main {
                         .collect(Collectors.toList())
         );
 
-
+        // edgesToRemove contains all the edges that involve vertexX or vertexY
         for (Edge edge : edgesToRemove) {
 
             // corner case

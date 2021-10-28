@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 
 public class Graph extends Multigraph<String, DefaultEdge>{
     private int counterVertices = 0;
-    Random generator = new Random(4324);
+    Random generator = new Random(13);
     static private final boolean REPEATABLE_TEST = false;
 
     public Graph(int size, double edgeProbability) {
